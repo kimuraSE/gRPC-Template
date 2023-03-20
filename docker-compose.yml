@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+
+  server:
+    build: 
+      context: ./server
+    ports:
+      - "50051:50051"
+    depends_on:
+      - mariadb
+  
+  envoy:
+    build: 
+      context: ./proxy
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+      - client
+
+  client:
+    build: 
+      context: ./client
+    volumes:
+      - ./client:/app
+    ports:
+      - "3000:3000"
+      
+ 
+  mariadb:
+    build: 
+      context: ./mariadb
+    ports:
+      - "3306:3306"
+    
+    
+    
